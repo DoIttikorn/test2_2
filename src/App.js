@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
+  const [api, setApi] = useState([]);
+  const [input, setInput] = useState('');
+  const api_fetch = () => {
+    fetch('https://api.publicapis.org/categories')
+      .then(res => res.json())
+      .then(data => {
+        setApi(data);
+      })
+  }
+  const filter_api = (event) => {
+    let value = event.target.value;
+    setInput(value);
+    let result = [];
+    result = api.filter((data) => { return data.search(value) != -1; });
+    setApi(result);
+  }
+  useEffect(() => { api_fetch() }, [])
+  useEffect(() => { if (input === '') { api_fetch() } }, [input])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <h1>Hello World</h1>
+        <input type="text"
+          // @ts-ignore
+          onChange={filter_api} />
+        <div>
+          {api.map((data, index) => {
+            return <p key={index}>{data}</p>
+          })}
+        </div>
+      </div>
     </div>
   );
 }
