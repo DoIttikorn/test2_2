@@ -25,7 +25,6 @@ function App() {
       <div>
         <h1>Hello World</h1>
         <input type="text"
-          // @ts-ignore
           onChange={filter_api} />
         <div>
           {api.map((data, index) => {
